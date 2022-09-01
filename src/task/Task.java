@@ -1,37 +1,34 @@
 package task;
-
 public class Task {
-    public static final String NEW_STATUS = "NEW";
-    public static final String IN_PROGRESS_STATUS = "IN_PROGRESS";
-    public static final String DONE_STATUS = "DONE";
+    protected int id;
+    protected String title;
+    protected String description;
+    protected String status;
 
-    private String name;
-    private String description;
-    private int id;
-    private String status;
-
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription (String description) {
         this.description = description;
+    }
+
+    public Task(String title, String description, String status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getStatus() {
@@ -42,13 +39,17 @@ public class Task {
         this.status = status;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status='" + status + '\'' +
+        return "ЗАДАЧА{" +
+                "№=" + id +
+                ", Название='" + title + '\'' +
+                ", Описание='" + description + '\'' +
+                ", Статус='" + status + '\'' +
                 '}';
     }
 }

@@ -1,51 +1,31 @@
 import manager.Manager;
 import task.Epic;
 import task.Subtask;
-import task.Task;
 
-import static task.Task.DONE_STATUS;
-import static task.Task.IN_PROGRESS_STATUS;
 
 public class Main {
 
     public static void main(String[] args) {
         Manager manager = new Manager();
-        Task task1 = manager.createTask("Купить по списку 1", "Поехать в Ленту");
-        Task task2 = manager.createTask("Купить по списку 2", "Поехать в Максидом");
-        Epic epic1 = manager.createEpic("Приготовить завтрак", "Купить продукты к завтраку");
-        Subtask subtask = manager.createSubtask(epic1.getId(), "Заказать роллы", "Роллы Филадельфия");
-        Epic epic2 = manager.createEpic("Навести порядок в квартире", "Дедлайн суббота");
-        Subtask subtask1 = manager.createSubtask(epic2.getId(), "Помыть собаку", "Записать к грумеру");
-        Subtask subtask2 = manager.createSubtask(epic2.getId(), "Поздравить мужа", "Купить подарок");
+        Epic epic1 = new Epic("Эпик №1", "Подзадача");
+        manager.addEpic(epic1);
 
-        System.out.println(task1.toString());
-        System.out.println(task2.toString());
-        System.out.println(epic1.toString());
-        System.out.println(subtask.toString());
-        System.out.println(epic2.toString());
-        System.out.println(subtask1.toString());
-        System.out.println(subtask2.toString());
+        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", "DONE", epic1);
+        manager.addSubtask(subtask11);
+        Subtask subtask12 = new Subtask("Эпик1 Подзадача2", "Подзадача 2.1", "IN_PROGRESS", epic1);
+        manager.addSubtask(subtask12);
+        Subtask subtask13 = new Subtask("Эпик1 Подзадача3", "Подзадача 3.1", "NEW", epic1);
+        manager.addSubtask(subtask13);
+        Subtask subtask12New = new Subtask("Эпик1 Подзадача2 изменена", "Подзадача 2.2", "NEW", epic1);
+        subtask12New.setId(12);
+        manager.updateSubtask(subtask12New);
 
-        task1.setStatus(IN_PROGRESS_STATUS);
-        manager.updateTask(task1);
-        System.out.println(task1.toString());
+        Epic epic2 = new Epic("Эпик №2", "ЯндексПрактикум");
+        manager.addEpic(epic2);
 
-        task2.setStatus(DONE_STATUS);
-        manager.updateTask(task2);
-        System.out.println(task2.toString());
-
-        manager.changeSubtaskStatus(epic1.getId(), subtask.getId(), IN_PROGRESS_STATUS);
-        System.out.println(epic1.toString());
-
-        manager.changeSubtaskStatus(epic2.getId(), subtask1.getId(), DONE_STATUS);
-        manager.changeSubtaskStatus(epic2.getId(), subtask2.getId(), IN_PROGRESS_STATUS);
-        System.out.println(epic2.toString());
-
-        manager.removeIdEpic(epic1.getId());
-        manager.removeIdTask(task1.getId());
-
-        System.out.println(manager.getEpics());
-        System.out.println(manager.getTasks());
-
+        Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Спринт № 1, 2, 3", "DONE", epic2);
+        manager.addSubtask(subtask21);
+        System.out.println("Эпик = " + manager.getEpics());
+        System.out.println("подзадача = " + manager.getSubtasks());
     }
 }
