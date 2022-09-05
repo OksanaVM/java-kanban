@@ -1,16 +1,20 @@
 package task;
-public class Task {
-    protected int id;
-    protected String title;
-    protected String description;
-    protected String status;
 
-    public String getTitle() {
-        return title;
+import java.util.ArrayList;
+
+public class Task {
+    private int id;
+    private String name;
+    private String description;
+    private final String status;
+    private ArrayList<Integer> tasks;
+
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -21,10 +25,10 @@ public class Task {
         this.description = description;
     }
 
-    public Task(String title, String description, String status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
+    public Task(String titleTask, String descriptionTask, String statusTask) {
+        this.name = titleTask;
+        this.description = descriptionTask;
+        this.status = statusTask;
     }
 
     public int getId() {
@@ -35,8 +39,8 @@ public class Task {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String checkEpicStatus(String status) {
+        return status;
     }
 
     public void setId(int id) {
@@ -47,7 +51,7 @@ public class Task {
     public String toString() {
         return "ЗАДАЧА{" +
                 "№=" + id +
-                ", Название='" + title + '\'' +
+                ", Название='" + name + '\'' +
                 ", Описание='" + description + '\'' +
                 ", Статус='" + status + '\'' +
                 '}';

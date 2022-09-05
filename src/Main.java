@@ -1,6 +1,7 @@
 import manager.Manager;
 import task.Epic;
 import task.Subtask;
+import task.Task;
 
 
 public class Main {
@@ -8,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
         Manager manager = new Manager();
         Epic epic1 = new Epic("Эпик №1", "Подзадача");
+
         manager.addEpic(epic1);
 
         Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", "DONE", epic1);
@@ -25,7 +27,8 @@ public class Main {
 
         Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Спринт № 1, 2, 3", "DONE", epic2);
         manager.addSubtask(subtask21);
-        System.out.println("Эпик = " + manager.getEpics());
-        System.out.println("подзадача = " + manager.getSubtasks());
+
+        System.out.println("Эпик = " + manager.getEpicsList());
+        System.out.println("Подзадача = " + manager.getSubtasksList());
     }
 }
