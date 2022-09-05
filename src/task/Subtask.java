@@ -22,8 +22,6 @@ public class Subtask extends Task {
         this.epic = epic;
     }
 
-
-
     @Override
     public String toString() {
         return "Подзадача{" +
