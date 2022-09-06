@@ -55,7 +55,7 @@ public class Manager {// класс для объекта менеджер
     //Эпики
     public void addEpic(Epic epic) {
         epic.setId(++id);
-        epic.checkEpicStatus("NEW");
+        epic.setStatus("NEW");
         epics.put(id, epic);
     }
 
@@ -129,19 +129,27 @@ public class Manager {// класс для объекта менеджер
         }
         subtasks.clear();
         for (Epic epic : epicsForStatusUpdate) {
-            epic.checkEpicStatus("NEW");
+            epic.setStatus("NEW");
         }
     }
 
-     ArrayList<Integer> getCompleteListOfSubTaskByEpicTask(Epic epic){
-        return epic.getEpicSubtasks();
+     public List<Subtask> getSubtaskListByEpic(int id) {
+         List<Subtask> subtasksNew = null;
+         if (epics.containsKey(id)) {
+             subtasksNew = new ArrayList<>();
+             Epic epic = epics.get(id);
+             for (Integer subtaskId : epic.getEpicSubtasks()) {
+                 subtasksNew.add(subtasks.get(subtaskId));
+             }
+         }
+         return subtasksNew;
      }
 
     // статусы эпиков
     private void updateEpicStatus(Epic epic) {
 
         if (epic.getEpicSubtasks().size() == 0) {
-            epic.checkEpicStatus("NEW");
+            epic.setStatus("NEW");
             return;
         }
 
@@ -159,11 +167,11 @@ public class Manager {// класс для объекта менеджер
         }
 
         if (allTaskIsDone) {
-            epic.checkEpicStatus("DONE");
+            epic.setStatus("DONE");
         } else if (allTaskIsNew) {
-            epic.checkEpicStatus("NEW");
+            epic.setStatus("NEW");
         } else {
-            epic.checkEpicStatus("IN_PROGRESS");
+            epic.setStatus("IN_PROGRESS");
         }
 
     }

@@ -6,7 +6,7 @@ public class Task {
     private int id;
     private String name;
     private String description;
-    private final String status;
+    private String status;
     private ArrayList<Integer> tasks;
 
     public String getName() {
@@ -39,7 +39,7 @@ public class Task {
         return status;
     }
 
-    public String checkEpicStatus(String status) {
+    public String setStatus(String status) {
         return status;
     }
 
