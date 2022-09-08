@@ -1,13 +1,41 @@
 package task;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class Task {
-    private int id;
     private String name;
     private String description;
-    private String status;
-    private ArrayList<Integer> tasks;
+    private Integer id;
+    protected String status;
+
+    public Task() {
+        this("Задача", null, -1, "NEW");
+    }
+
+    public Task(String name, String description, Integer id) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = "NEW";
+    }
+
+    public Task(String name, Integer id) {
+        this(name, "", id, "NEW");
+    }
+
+    public Task(String name, String description, Integer id, String status) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = status;
+    }
+
+    public Task(Task task) {
+        this.name = task.name;
+        this.description = task.description;
+        this.id = task.id;
+        this.status = task.status;
+    }
 
     public String getName() {
         return name;
@@ -21,17 +49,11 @@ public class Task {
         return description;
     }
 
-    public void setDescription (String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public Task(String titleTask, String descriptionTask, String statusTask) {
-        this.name = titleTask;
-        this.description = descriptionTask;
-        this.status = statusTask;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -39,21 +61,28 @@ public class Task {
         return status;
     }
 
-    public String setStatus(String status) {
-        return status;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return Objects.equals(getName(), task.getName())
+                && Objects.equals(getDescription(), task.getDescription())
+                && Objects.equals(getId(), task.getId())
+                && Objects.equals(getStatus(), task.getStatus());
     }
 
     @Override
     public String toString() {
-        return "ЗАДАЧА{" +
-                "№=" + id +
-                ", Название='" + name + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
+        return "task.Task{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
