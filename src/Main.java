@@ -29,7 +29,7 @@ public class Main {
         manager.addSubtask(subtask21);
         System.out.println("Эпик = " + manager.getEpicsList());
         System.out.println("подзадача = " + manager.getSubtasksList());
-        System.out.println(manager.getSubtaskListByEpic(epic1));
+        //System.out.println(manager.getSubtaskListByEpic(epic1));
         manager.deleteAllEpics();
         System.out.println("Эпик = " + manager.getEpicsList());
     }

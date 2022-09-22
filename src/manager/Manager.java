@@ -112,13 +112,13 @@ public class Manager {// класс для объекта менеджер
                 subtasks.clear();
             }
 
-    public List<Subtask> getSubtaskListByEpic(Epic epic) {
-        ArrayList<Subtask> subtaskOfEpic = new ArrayList<>();
-        for (Subtask subtask : subtasks.values()){
-            if (epic.getId().(subtask.getEpic())){
-                subtaskOfEpic.add(subtask);
-            }
-        }
-        return subtaskOfEpic;
-    }
+   public List<Subtask> getSubtaskListByEpic(Epic epic) {
+       ArrayList<Subtask> subtaskOfEpic = new ArrayList<>();
+       for (Subtask subtask : subtasks.values()) {
+           if (epic.getId().equals(subtask.getId())) {
+               subtaskOfEpic.add(subtask);
+           }
+       }
+       return subtaskOfEpic;
+   }
 }
