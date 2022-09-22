@@ -1,104 +1,36 @@
+import jdk.swing.interop.SwingInterOpUtils;
 import manager.Manager;
 import task.Epic;
-import task.SubTask;
-import task.Task;
-
-import java.util.ArrayList;
+import task.Subtask;
 
 
 public class Main {
 
     public static void main(String[] args) {
         Manager manager = new Manager();
+        Epic epic1 = new Epic("Эпик №1", "Подзадача");
+        manager.addEpic(epic1);
 
-        System.out.println("Метод createTask(task). Начинаем тестирование.");
-        final Task task = new Task();
-        System.out.println("Создаем 2 задачи");
-        final Task createdTask = manager.createTask(task);
-        final Task createdTask1 = manager.createTask(task);
-        System.out.println("Печатаем содержание 2х задач");
-        System.out.println(createdTask);
-        System.out.println(createdTask1);
-        if(!task.equals(createdTask) && !createdTask.equals(createdTask1))
-            System.out.println("Метод createTask(task) работает штатно");
-        else
-            System.out.println("Метод createTask(task) работает неправильно");
+        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", "DONE", epic1);
+        manager.addSubtask(subtask11);
+        Subtask subtask12 = new Subtask("Эпик1 Подзадача2", "Подзадача 2.1", "IN_PROGRESS", epic1);
+        manager.addSubtask(subtask12);
+        Subtask subtask13 = new Subtask("Эпик1 Подзадача3", "Подзадача 3.1", "NEW", epic1);
+        manager.addSubtask(subtask13);
+       subtask12.setTitle("Эпик1 Подзадача2 изменена");
+      subtask12.setDescription("Подзадача 2.2");
+      subtask12.setStatus("NEW");
+        manager.updateSubtask(subtask12);
 
-        System.out.println("Метод findAllTask(). Начинаем тестирование.");
-        ArrayList<Task> taskArrayList = manager.findAllTasks();
-        System.out.println("Метод findAllTask(). Печатаем весь список задач:");
-        for (Task value : taskArrayList) {
-            System.out.println(value);
-        }
-        if (taskArrayList.isEmpty()) {
-            System.out.println("Метод findAllTask() не возвращает список задач");
-        } else {
-            System.out.println("Метод findAllTask() работает правильно");
-        }
+        Epic epic2 = new Epic("Эпик №2", "ЯндексПрактикум");
+        manager.addEpic(epic2);
 
-        System.out.println("Метод findTaskById(). Начинаем тестирование.");
-        Task foundTask = manager.findTaskById(2);
-        System.out.println("Печатаем найденную задачу");
-        System.out.println(foundTask);
-        if (foundTask.getId() != null)
-            System.out.println("Метод findByIdSubTask() работает");
-        else
-            System.out.println("Метод findByIdSubTask() задачу не нашел");
-
-        System.out.println("Метод updateTaskById(). Начинаем тестирование.");
-        final Task createdTask2 = manager.updateTaskByID(createdTask1);
-        System.out.println("Печатам переданную в метод и обновленную задачу:");
-        System.out.println(createdTask1);
-        System.out.println(createdTask2);
-        if (createdTask2.equals(createdTask1))
-            System.out.println("Метод updateTaskById() работает");
-        else
-            System.out.println("Метод updateTaskById() не работает");
-
-
-        System.out.println("Метод deleteTaskById(). Начинаем тестирование.");
-        System.out.println("Печатам удаляемую задачу:");
-        System.out.println(manager.findTaskById(1));
-        manager.deleteTaskById(1);
-        if (manager.findTaskById(1) == null)
-            System.out.println("Задача удалена. Метод deleteTaskById() работает правильно.");
-        else
-            System.out.println("Метод deleteTaskById() не работает");
-
-        System.out.println("Метод deleteAllTask(). Начинаем тестирование.");
-        manager.deleteAllTask();
-        if (manager.findAllTasks().isEmpty()) {
-            System.out.println("Метод deleteAllTask() работает правильно");
-        } else {
-            System.out.println("Метод deleteAllTask() не работает");
-        }
-        System.out.println("Метод createEpic(epic). Начинаем тестирование.");
-        final Epic epic = new Epic("Эпик", "descriptionOfEpic", -1);
-        System.out.println("Создаем 2 эпика");
-        final Epic createdEpic = manager.createEpic(epic);
-        final Epic createdEpic1 = manager.createEpic(epic);
-        System.out.println("Печатаем содержание 2х задач");
-        System.out.println(createdEpic);
-        System.out.println(createdEpic1);
-        if(!epic.equals(createdEpic) && !createdEpic.equals(createdEpic1))
-            System.out.println("Метод createEpic(task) работает штатно");
-        else
-            System.out.println("Метод createEpic(task) работает неправильно");
-        System.out.println("Метод createSubTask(subtask, epic). Начинаем тестирование.");
-        final SubTask subTask = new SubTask("Подзадача", "Описание", -1, 1);
-        System.out.println("Создаем и печатаем 2 подзадачи одного эпика");
-        final SubTask subTask1 = manager.createSubTask(subTask, createdEpic);
-        final SubTask subTask2 = manager.createSubTask(subTask, createdEpic);
-        System.out.println(subTask1);
-        System.out.println(subTask2);
-        System.out.println("Создаем и печатаем 2 подзадачи другого эпика");
-        final SubTask subTask3 = manager.createSubTask(subTask, createdEpic1);
-        final SubTask subTask4 = manager.createSubTask(subTask, createdEpic1);
-        System.out.println(subTask3);
-        System.out.println(subTask4);
-        if(subTask1.getEpicID().equals(subTask2.getEpicID()) && subTask3.getEpicID().equals(subTask4.getEpicID()))
-            System.out.println("Метод createSubTask(subtask, epic) работает штатно");
-        else
-            System.out.println("Метод createSubTask(subtask, epic) работает неправильно");
+        Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Спринт № 1, 2, 3", "DONE", epic2);
+        manager.addSubtask(subtask21);
+        System.out.println("Эпик = " + manager.getEpicsList());
+        System.out.println("подзадача = " + manager.getSubtasksList());
+        System.out.println(manager.getSubtaskListByEpic(epic1));
+        manager.deleteAllEpics();
+        System.out.println("Эпик = " + manager.getEpicsList());
     }
 }
