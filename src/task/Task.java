@@ -8,7 +8,7 @@ public class Task {
     private String description;
     private String status;
 
-    public Task (String title, String description, String status) {
+    public Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -18,7 +18,7 @@ public class Task {
         return title;
     }
 
-    public void setTitle (String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -26,7 +26,7 @@ public class Task {
         return description;
     }
 
-    public void setDescription (String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -48,17 +48,24 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o.getClass().equals(this.getClass()))) {
+            return false;
+        }
         Task task = (Task) o;
-        return Objects.equals(getTitle(), task.getTitle())
-                && Objects.equals(getDescription(), task.getDescription())
-                && Objects.equals(getId(), task.getId())
-                && Objects.equals(getStatus(), task.getStatus());
+        return Objects.equals(title, task.title)
+                && Objects.equals(description, task.description)
+                && Objects.equals(id, task.id);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getDescription(), getId(), getStatus());
+        return Objects.hash(getTitle(), getDescription(), getId());
     }
 
     @Override

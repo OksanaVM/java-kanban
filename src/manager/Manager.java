@@ -1,7 +1,9 @@
 package manager;
+
 import task.Epic;
 import task.Subtask;
 import task.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,15 +59,15 @@ public class Manager {// класс для объекта менеджер
     }
 
     public void updateEpic(Epic epic) {
-         epics.put(epic.getId(), epic);
-       }
+        epics.put(epic.getId(), epic);
+    }
 
     public Epic getEpic(int id) {
         return epics.getOrDefault(id, null);
     }
 
 
-    public List<Epic> getEpicsList() {
+    public List<Epic> getEpicList() {
         return new ArrayList<>(epics.values());
     }
 
@@ -88,17 +90,17 @@ public class Manager {// класс для объекта менеджер
     public void addSubtask(Subtask subtask) {
         subtask.setId(++id);
         subtasks.put(id, subtask);
-         }
+    }
 
     public void updateSubtask(Subtask subtask) {
         subtasks.put(subtask.getId(), subtask);
-            }
+    }
 
     public Subtask getSubtask(int id) {
         return subtasks.getOrDefault(id, null);
     }
 
-    public List<Subtask> getSubtasksList() {
+    public List<Subtask> getSubtaskList() {
         return new ArrayList<>(subtasks.values());
     }
 
@@ -108,17 +110,18 @@ public class Manager {// класс для объекта менеджер
         }
     }
 
-    public void deleteAllSubtask() {
-                subtasks.clear();
-            }
+    public void deleteAllSubtasks(Subtask subtask21) {
+        subtasks.clear();
+    }
 
-   public List<Subtask> getSubtaskListByEpic(Epic epic) {
-       ArrayList<Subtask> subtaskOfEpic = new ArrayList<>();
-       for (Subtask subtask : subtasks.values()) {
-           if (epic.getId().equals(subtask.getId())) {
-               subtaskOfEpic.add(subtask);
-           }
-       }
-       return subtaskOfEpic;
-   }
+    // метод получения списка подзадач определнного эпика
+    public List<Subtask> getSubtaskListByEpic(Epic epic) {
+        ArrayList<Subtask> subtaskOfEpic = new ArrayList<>();
+        for (Subtask subtask : subtasks.values()) {
+            if (epic.equals(subtask.getEpic())) {
+                subtaskOfEpic.add(subtask);
+            }
+        }
+        return subtaskOfEpic;
+    }
 }

@@ -1,4 +1,5 @@
 package task;
+
 import java.util.Objects;
 
 
@@ -6,11 +7,11 @@ public class Subtask extends Task {
 
     private Epic epic;
 
-    public Subtask (String title, String description, String status) {
+    public Subtask(String title, String description, String status) {
         super(title, description, status);
     }
 
-    public Subtask (String title, String description, String status, Epic epic) {
+    public Subtask(String title, String description, String status, Epic epic) {
         super(title, description, status);
         this.epic = epic;
     }
@@ -19,11 +20,11 @@ public class Subtask extends Task {
         return epic;
     }
 
-    public void setEpic (Epic epic) {
+    public void setEpic(Epic epic) {
         this.epic = epic;
     }
 
-    public void setStatus (String status) {
+    public void setStatus(String status) {
         super.setStatus(status);
         if (epic != null) {
             epic.updateEpicStatus();
@@ -32,21 +33,22 @@ public class Subtask extends Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Subtask)) return false;
-        if (!super.equals(o)) return false;
+        if (!super.equals(0)) {
+            return false;
+        }
         Subtask subtask = (Subtask) o;
-        return Objects.equals(getEpic(), subtask.getId());
+        return Objects.equals(epic, subtask.epic);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId());
+        return Objects.hash(super.hashCode(), epic);
     }
 
     @Override
     public String toString() {
         return "Подзадача{" +
-                "№=" + getId()+
+                "№=" + getId() +
                 ", Название='" + getTitle() + '\'' +
                 ", Описание='" + getDescription() + '\'' +
                 ", Статус='" + getStatus() + '\'' +

@@ -7,7 +7,7 @@ public class Epic extends Task {
 
     public Epic(String title, String description) {
         super(title, description, "New");
-        }
+    }
 
     public ArrayList<Subtask> getEpicSubtasks() {
         return epicSubtasks;
@@ -16,8 +16,9 @@ public class Epic extends Task {
     public void setEpicSubtasks(ArrayList<Subtask> epicSubtasks) {
         this.epicSubtasks = epicSubtasks;
     }
-// метод добавления подзадач в Эпик
-    public void addSubtask (Subtask subtask){
+
+    // метод добавления подзадач в Эпик
+    public void addSubtasks(Subtask subtask) {
         epicSubtasks.add(subtask);
         subtask.setEpic(this);
         updateEpicStatus();
@@ -44,26 +45,26 @@ public class Epic extends Task {
         }
 
         if (allTaskIsDone) {
-           super.setStatus("DONE");
+            super.setStatus("DONE");
         } else if (allTaskIsNew) {
-           super.setStatus("NEW");
+            super.setStatus("NEW");
         } else {
             super.setStatus("IN_PROGRESS");
         }
     }
 
-// метод чтоб нельзя было поменять статус произвольно
+    // метод чтоб нельзя было поменять статус произвольно
     @Override
-    public void setStatus(String status){
-         }
+    public void setStatus(String status) {
+    }
 
     @Override
     public String toString() {
         return "Эпик{" +
-                "№=" + getId()+
+                "№=" + getId() +
                 ", Название='" + getTitle() + '\'' +
                 ", Описание='" + getDescription() + '\'' +
-                ", Статус='" + getStatus()+ '\'' +
+                ", Статус='" + getStatus() + '\'' +
                 '}';
     }
 }
