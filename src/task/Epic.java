@@ -3,70 +3,43 @@ package task;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<Subtask> epicSubtasks = new ArrayList<>();
+    private ArrayList<Integer> epicSubtasks = new ArrayList<>();
 
-    public Epic(String title, String description) {
-        super(title, description, "New");
+    public Epic(String name, String description) {
+        super(name, description, TaskStatus.NEW);
     }
 
-    public ArrayList<Subtask> getEpicSubtasks() {
+    public ArrayList<Integer> getEpicSubtasks() {
         return epicSubtasks;
     }
 
-    public void setEpicSubtasks(ArrayList<Subtask> epicSubtasks) {
+    public void setEpicSubtasks(ArrayList<Integer> epicSubtasks) {
         this.epicSubtasks = epicSubtasks;
     }
 
     // метод добавления подзадач в Эпик
-    public void addSubtasks(Subtask subtask) {
-        epicSubtasks.add(subtask);
-        subtask.setEpic(this);
-        updateEpicStatus();
-    }
-
-    protected void updateEpicStatus() {
-
-        if (getEpicSubtasks().size() == 0) {
-            super.setStatus("NEW");
-            return;
-        }
-
-        boolean allTaskIsNew = true;
-        boolean allTaskIsDone = true;
-
-        for (Subtask subtask : epicSubtasks) {
-            String status = subtask.getStatus();
-            if (!status.equals("NEW")) {
-                allTaskIsNew = false;
-            }
-            if (!status.equals("DONE")) {
-                allTaskIsDone = false;
-            }
-        }
-
-        if (allTaskIsDone) {
-            super.setStatus("DONE");
-        } else if (allTaskIsNew) {
-            super.setStatus("NEW");
-        } else {
-            super.setStatus("IN_PROGRESS");
-        }
-    }
-
-    // метод чтоб нельзя было поменять статус произвольно
-    @Override
-    public void setStatus(String status) {
+    public void addSubtask(Subtask subtask) {
+        epicSubtasks.add(subtask.getId());
     }
 
     @Override
     public String toString() {
+        String s = "";
+        for (Integer subtaskId : epicSubtasks) {
+            if (!s.isEmpty()) {
+                s += ", ";
+            }
+            s += subtaskId;
+        }
         return "Эпик{" +
                 "№=" + getId() +
-                ", Название='" + getTitle() + '\'' +
+                ", Название='" + getName() + '\'' +
                 ", Описание='" + getDescription() + '\'' +
                 ", Статус='" + getStatus() + '\'' +
+                ", Подзадачи: id=" + s +
                 '}';
     }
+
 }
 
 

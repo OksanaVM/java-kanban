@@ -4,22 +4,22 @@ import java.util.Objects;
 
 public class Task {
     private int id;
-    private String title;
+    private String name;
     private String description;
-    private String status;
+    private TaskStatus status;
 
-    public Task(String title, String description, String status) {
-        this.title = title;
+    public Task(String name, String description, TaskStatus status) {
+        this.name = name;
         this.description = description;
         this.status = status;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -38,11 +38,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -58,21 +58,22 @@ public class Task {
             return false;
         }
         Task task = (Task) o;
-        return Objects.equals(title, task.title)
+        return Objects.equals(id, task.id)
+                && Objects.equals(name, task.name)
                 && Objects.equals(description, task.description)
-                && Objects.equals(id, task.id);
+                && Objects.equals(status, task.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getDescription(), getId());
+        return Objects.hash(id, name, description, status);
     }
 
     @Override
     public String toString() {
         return "ЗАДАЧА{" +
                 "№=" + id +
-                ", Название='" + title + '\'' +
+                ", Название='" + name + '\'' +
                 ", Описание='" + description + '\'' +
                 ", Статус='" + status + '\'' +
                 '}';
