@@ -3,6 +3,7 @@ package task;
 import java.util.Objects;
 
 public class Task {
+
     private int id;
     private String name;
     private String description;
@@ -47,6 +48,7 @@ public class Task {
     }
 
     @Override
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -56,20 +58,24 @@ public class Task {
         }
         if (!(o.getClass().equals(this.getClass()))) {
             return false;
+
         }
         Task task = (Task) o;
         return Objects.equals(id, task.id)
                 && Objects.equals(name, task.name)
                 && Objects.equals(description, task.description)
                 && Objects.equals(status, task.status);
+
     }
 
     @Override
+
     public int hashCode() {
         return Objects.hash(id, name, description, status);
     }
 
     @Override
+
     public String toString() {
         return "ЗАДАЧА{" +
                 "№=" + id +
