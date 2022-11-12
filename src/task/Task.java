@@ -48,7 +48,6 @@ public class Task {
     }
 
     @Override
-
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -69,13 +68,11 @@ public class Task {
     }
 
     @Override
-
     public int hashCode() {
         return Objects.hash(id, name, description, status);
     }
 
     @Override
-
     public String toString() {
         return "ЗАДАЧА{" +
                 "№=" + id +

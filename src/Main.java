@@ -838,7 +838,7 @@ public class Main {
 
         manager.addSubtask(subtask);
 
-        List<Integer> epicSubtasks = epic1.getEpicSubtasks();
+        List<Integer> epicSubtasks = epic1.getSubtaskIds();
 
         System.out.println(epicSubtasks);
 

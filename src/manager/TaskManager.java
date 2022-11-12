@@ -49,7 +49,6 @@ public interface TaskManager {
     void deleteSubtasks();
 
 // добавили новый метод - получение истории
-
     Collection<Task> getHistory();
 
 }
