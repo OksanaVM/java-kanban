@@ -1,9 +1,7 @@
 package manager;
 
 import task.Epic;
-
 import task.Subtask;
-
 import task.Task;
 
 import java.util.Collection;
@@ -48,7 +46,7 @@ public interface TaskManager {
 
     void deleteSubtasks();
 
-// добавили новый метод - получение истории
+    // добавили новый метод - получение истории
     Collection<Task> getHistory();
 
 }

@@ -697,115 +697,92 @@ public class Main {
         TaskManager manager = Managers.getDefault();
 
         Task taskFirst = new Task("Поесть", "Принять пищу", TaskStatus.NEW);
-
         manager.addTask(taskFirst);
 
         Task taskSecond = new Task("Отдохнуть", "Поспать в тихий час", TaskStatus.NEW);
-
         manager.addTask(taskSecond);
 
         Epic epic1 = new Epic("Эпик №1", "Эпик");
-
         manager.addEpic(epic1);
 
         Epic epic2 = new Epic("Эпик №2", "Эпик");
-
         manager.addEpic(epic2);
 
         Epic epic3 = new Epic("Эпик №3", "Эпик");
-
         manager.addEpic(epic3);
 
-        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1",
-
-                TaskStatus.NEW, epic1.getId());
-
+        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", TaskStatus.NEW, epic1.getId());
         manager.addSubtask(subtask11);
 
         Subtask subtask12 = new Subtask("Эпик1 Подзадача2", "Подзадача 2.1",
-
                 TaskStatus.NEW, epic1.getId());
-
         manager.addSubtask(subtask12);
 
         Subtask subtask13 = new Subtask("Эпик1 Подзадача3", "Подзадача 3.1",
-
                 TaskStatus.NEW, epic1.getId());
-
         manager.addSubtask(subtask13);
 
         Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Подзадача 2.1",
-
                 TaskStatus.NEW, epic2.getId());
-
         manager.addSubtask(subtask21);
 
         Subtask subtask22 = new Subtask("Эпик2 Подзадача2", "Подзадача 2.2",
-
                 TaskStatus.DONE, epic2.getId());
 
         manager.addSubtask(subtask22);
 
-        Subtask subtask31 = new Subtask("Эпик3 Подзадача1", "Подзадача 3.1",
-
+        /*Subtask subtask31 = new Subtask("Эпик3 Подзадача1", "Подзадача 3.1",
                 TaskStatus.NEW, epic3.getId());
-
-        manager.addSubtask(subtask31);
+        manager.addSubtask(subtask31);*/
 
         System.out.println("История (ожидается: пусто):");
 
         for (Task task : manager.getHistory()) {
-
             System.out.println("- " + task);
-
         }
 
 // делаем просмотры
 
-        manager.getTask(taskFirst.getId());
-
-        manager.getEpic(epic1.getId());
-
+        manager.getSubtask(subtask13.getId());
         manager.getSubtask(subtask11.getId());
-
-        System.out.println("История (ожидается: 'Поесть'; 'Эпик №1'; 'Эпик1 Подзадача1'):");
-
-        for (Task task : manager.getHistory()) {
-
-            System.out.println("- " + task);
-
-        }
-
+        manager.getEpic(epic1.getId());
+        manager.getTask(taskFirst.getId());
         manager.getTask(taskSecond.getId());
 
-        manager.getTask(taskFirst.getId());
+        System.out.println("История (ожидается: id 8, 6, 3, 1, 2):");
 
-        manager.getSubtask(subtask11.getId());
+        for (Task task : manager.getHistory()) {
+            System.out.println("- " + task);
+        }
 
-        manager.getEpic(epic2.getId());
+        manager.deleteTask(taskFirst.getId());
 
+        System.out.println("История (ожидается: id 8, 6, 3, 2):");
+
+        for (Task task : manager.getHistory()) {
+            System.out.println("- " + task);
+        }
+
+        manager.getSubtask(subtask13.getId());
+        manager.getTask(taskSecond.getId());
         manager.getSubtask(subtask12.getId());
-
         manager.getEpic(epic1.getId());
-
+        manager.getEpic(epic2.getId());
         manager.getTask(taskSecond.getId());
 
-        manager.getEpic(epic1.getId());
-
-        manager.getSubtask(subtask21.getId());
-
-        System.out.println("История (ожидается: 'Эпик1 Подзадача1'; 'Отдохнуть'; 'Поесть'; 'Эпик1 Подзадача1'; 'Эпик №2'; 'Эпик1 Подзадача2';" +
-
-                " 'Эпик №1'; 'Отдохнуть'; 'Эпик №1'; 'Эпик2 Подзадача1'):");
+        System.out.println("История (ожидается: id = 6, 8, 7, 3, 4, 2):");
 
         for (Task task : manager.getHistory()) {
-
             System.out.println("- " + task);
-
         }
 
-        subtask11.equals(taskFirst);
+        manager.deleteEpic(epic1.getId());
 
+        System.out.println("История (ожидается: id = 4, 2):");
+
+        for (Task task : manager.getHistory()) {
+            System.out.println("- " + task);
+        }
     }
 
     public static void main(String[] args) {
