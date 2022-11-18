@@ -12,11 +12,8 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
-    // добавили
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private int id = 0; //хранение задач для Задач, Подзадач и Эпиков:
-
-// изменили
+    private int id = 0;
 
     InMemoryTaskManager() {
         id = 0;
@@ -37,7 +34,6 @@ public class InMemoryTaskManager implements TaskManager {
         return Collections.unmodifiableCollection(subtasks.values());
     }
 
-    // метод получения списка подзадач определенного эпика
     @Override
     public Collection<Subtask> getEpicSubtasks(int epicId) {
         ArrayList<Subtask> subtasksOfEpic = new ArrayList<>();
@@ -53,7 +49,6 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasksOfEpic;
     }
 
-    // извлекаем task
     @Override
     public Task getTask(int taskId) {
         Task task = tasks.get(taskId);
@@ -61,7 +56,6 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
-    // изменили
     @Override
     public Epic getEpic(int epicId) {
         Epic epic = epics.getOrDefault(epicId, null);
@@ -69,7 +63,6 @@ public class InMemoryTaskManager implements TaskManager {
         return epic;
     }
 
-    // изменили
     @Override
     public Subtask getSubtask(int subtaskId) {
         Subtask subtask = subtasks.getOrDefault(subtaskId, null);
@@ -77,21 +70,18 @@ public class InMemoryTaskManager implements TaskManager {
         return subtask;
     }
 
-    //Задачи: добавляем task
     @Override
     public void addTask(Task task) {
         task.setId(++id);
         tasks.put(id, task);
     }
 
-    //Эпики
     @Override
     public void addEpic(Epic epic) {
         epic.setId(++id);
         epics.put(id, epic);
     }
 
-    // подзадач
     @Override
     public void addSubtask(Subtask subtask) {
         subtask.setId(++id);
@@ -103,7 +93,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // храним task
     @Override
     public void updateTask(Task task) {
         tasks.put(task.getId(), task);
@@ -127,10 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-// метод для удаления
-
     @Override
-
     public void deleteTask(int taskId) {
         if (tasks.containsKey(taskId)) {
             tasks.remove(taskId);
@@ -218,7 +204,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // добавили
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();

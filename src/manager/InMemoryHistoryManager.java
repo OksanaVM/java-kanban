@@ -18,7 +18,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         this.receivedTasks = new HashMap<>(); //5/
     }
 
-    private void linkLast(Task element) {  //5/ реализация двусвязного списка задач с методом linkLast
+    private void linkLast(Task element) {  /*реализация двусвязного списка задач с методом linkLast*/
         final Node newNode = new Node(tail, element, null);
         receivedTasks.put(element.getId(), newNode);
         if (head == null) {
@@ -30,7 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         tail = newNode;
     }
 
-    private List<Task> getTasks() { //5/ реализация двусвязного списка задач с методом getTasks
+    private List<Task> getTasks() { /*реализация двусвязного списка задач с методом getTasks*/
         List<Task> tasks = new ArrayList<>();
         Node currentNode = head;
         while (currentNode != null) {
@@ -52,8 +52,12 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tail = node.prev;
                 tail.next = null;
             } else {
-                node.prev.next = node.next;
-                node.next.prev = node.prev;
+                if (node.prev != null) {
+                    node.prev.next = node.next;
+                }
+                if (node.next != null) {
+                    node.next.prev = node.prev;
+                }
             }
         }
     }
@@ -78,7 +82,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 }
 
-class Node { //5/ отдельный класс Node для узла списка
+class Node { //отдельный класс Node для узла списка//
 
     Task data;
     Node next;

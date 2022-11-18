@@ -10,6 +10,9 @@ public class Task {
     private TaskStatus status;
 
     public Task() {
+        name = "";
+        description = "";
+        status = TaskStatus.NEW;
     }
 
     public Task(String name, String description, TaskStatus status) {

@@ -9,6 +9,7 @@ public class Epic extends Task {
     private ArrayList<Integer> subtaskIds = new ArrayList<>();
 
     public Epic() {
+        super();
     }
 
     public Epic(String name, String description) {
@@ -19,13 +20,10 @@ public class Epic extends Task {
         return Collections.unmodifiableList(subtaskIds);
     }
 
-    // метод добавления подзадачи в Эпик
     public void addSubtask(Subtask subtask) {
         subtaskIds.add(subtask.getId());
     }
 
-    // добавили
-// метод удаления подзадачи из эпика
     public void removeSubtask(Integer subtaskId) {
         subtaskIds.remove(subtaskId);
     }
