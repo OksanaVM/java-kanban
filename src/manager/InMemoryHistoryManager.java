@@ -1,5 +1,6 @@
 package manager;
 
+import task.Epic;
 import task.Task;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     public InMemoryHistoryManager() {
-        this.receivedTasks = new HashMap<>(); //5/
+        this.receivedTasks = new HashMap<>();
     }
 
     private void linkLast(Task element) {  /*реализация двусвязного списка задач с методом linkLast*/
@@ -80,6 +81,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         //return listHistory;//
         return getTasks();
     }
+
 }
 
 class Node { //отдельный класс Node для узла списка//
@@ -94,4 +96,3 @@ class Node { //отдельный класс Node для узла списка//
         this.prev = prev;
     }
 }
-

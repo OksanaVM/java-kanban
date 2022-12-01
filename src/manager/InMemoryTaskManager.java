@@ -208,4 +208,12 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
+
+    protected HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    protected void setId(int id) {
+        this.id = id;
+    }
 }
