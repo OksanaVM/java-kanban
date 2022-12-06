@@ -209,7 +209,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    protected HistoryManager getHistoryManager() {
+    public HistoryManager getHistoryManager() {
         return historyManager;
     }
 

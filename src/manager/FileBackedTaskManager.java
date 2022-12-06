@@ -1,16 +1,12 @@
 package manager;
-
 import exceptions.ManagerSaveException;
 import exceptions.TaskNotFoundException;
 import task.Epic;
+import task.TaskStatus;
 import task.Subtask;
 import task.Task;
-import task.TaskStatus;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +17,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public FileBackedTaskManager(File file) {
         super();
         this.file = file;
+
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
-        FileBackedTaskManager fileBackedTasksManager = new FileBackedTaskManager(file);
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
 
-        fileBackedTasksManager.needToSave = false;
+        fileBackedTaskManager.needToSave = false;
 
         try {
             FileInputStream input = new FileInputStream(file);
@@ -57,7 +54,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             if (id > maxId) {
                                 maxId = id;
                             }
-                            fileBackedTasksManager.addEpic(epic);
+                            fileBackedTaskManager.addEpic(epic);
 
                             break;
                         case SUBTASK:
@@ -66,7 +63,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             if (id > maxId) {
                                 maxId = id;
                             }
-                            fileBackedTasksManager.addSubtask(subtask);
+                            fileBackedTaskManager.addSubtask(subtask);
 
                             break;
 
@@ -77,7 +74,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             if (id > maxId) {
                                 maxId = id;
                             }
-                            fileBackedTasksManager.addTask(task);
+                            fileBackedTaskManager.addTask(task);
 
                             break;
                     }
@@ -85,22 +82,42 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     lineOfHistory = line;
                 }
             }
-            fileBackedTasksManager.setId(maxId);
+            fileBackedTaskManager.setId(maxId);
             List<Integer> ids = historyFromString(lineOfHistory);
             for (Integer taskId : ids) {
                 try {
-                    Task task = fileBackedTasksManager.getTaskAllKind(taskId);
-                    fileBackedTasksManager.getHistoryManager().add(task);
+                    Task task = fileBackedTaskManager.getTaskAllKind(taskId);
+                    fileBackedTaskManager.getHistoryManager().add(task);
                 } catch (TaskNotFoundException ex) {
                     System.err.println(ex.getMessage());
                 }
             }
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new ManagerSaveException("Не удалось прочитать файл!");
         }
 
-        fileBackedTasksManager.needToSave = true;
-        return fileBackedTasksManager;
+        fileBackedTaskManager.needToSave = true;
+        return fileBackedTaskManager;
+    }
+
+    private Task getTaskAllKind(int id) throws TaskNotFoundException {
+        Task task = getTask(id);
+        if (task != null) {
+            return task;
+        }
+
+        Task epic = getEpic(id);
+        if (epic != null) {
+            return epic;
+        }
+
+        Task subtask = getSubtask(id);
+        if (subtask != null) {
+            return subtask;
+        }
+
+        throw new TaskNotFoundException("Не найдена задача произвольного типа по id!");
     }
 
     private static String historyToString(HistoryManager manager) {
@@ -113,10 +130,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private static List<Integer> historyFromString(String value) {
-        String[] idsString = value.split(",");
         List<Integer> tasksId = new ArrayList<>();
-        for (String idString : idsString) {
-            tasksId.add(Integer.valueOf(idString));
+        if (!value.trim().isEmpty()) {
+            String[] idsString = value.split(",");
+            for (String idString : idsString) {
+                tasksId.add(Integer.valueOf(idString));
+            }
         }
         return tasksId;
     }
@@ -132,7 +151,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         String s = task.getId() + "," + taskType + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription();
         if (task instanceof Subtask) {
-            s += "," + ((Subtask) task).getEpicId();
+            s += "," + ((Subtask)task).getEpicId();
         }
 
         return s;
@@ -156,80 +175,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             default:
                 return null;
         }
-    }
-
-    public static void main(String[] args) {
-        FileBackedTaskManager manager = new FileBackedTaskManager(new File("data.csv"));
-
-        Task taskFirst = new Task("Поесть", "Принять пищу", TaskStatus.NEW);
-        manager.addTask(taskFirst);
-
-        Task taskSecond = new Task("Отдохнуть", "Поспать в тихий час", TaskStatus.NEW);
-        manager.addTask(taskSecond);
-
-        Epic epic1 = new Epic("Эпик №1", "Эпик");
-        manager.addEpic(epic1);
-
-        Epic epic2 = new Epic("Эпик №2", "Эпик");
-        manager.addEpic(epic2);
-
-        Epic epic3 = new Epic("Эпик №3", "Эпик");
-        manager.addEpic(epic3);
-
-        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", TaskStatus.NEW, epic1.getId());
-        manager.addSubtask(subtask11);
-
-        Subtask subtask12 = new Subtask("Эпик1 Подзадача2", "Подзадача 2.1",
-                TaskStatus.NEW, epic1.getId());
-        manager.addSubtask(subtask12);
-
-        Subtask subtask13 = new Subtask("Эпик1 Подзадача3", "Подзадача 3.1",
-                TaskStatus.NEW, epic1.getId());
-        manager.addSubtask(subtask13);
-
-        Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Подзадача 2.1",
-                TaskStatus.NEW, epic2.getId());
-        manager.addSubtask(subtask21);
-
-        Subtask subtask22 = new Subtask("Эпик2 Подзадача2", "Подзадача 2.2",
-                TaskStatus.DONE, epic2.getId());
-
-        manager.addSubtask(subtask22);
-
-        manager.getTask(taskFirst.getId());
-        manager.getEpic(epic2.getId());
-        manager.getSubtask(subtask11.getId());
-        manager.getTask(taskFirst.getId());
-        manager.getTask(taskSecond.getId());
-
-        FileBackedTaskManager manager2 = FileBackedTaskManager.loadFromFile(new File("data.csv"));
-        System.out.println("Tasks:");
-        System.out.println(manager2.getTasks());
-        System.out.println("Epics:");
-        System.out.println(manager2.getEpics());
-        System.out.println("Subtasks:");
-        System.out.println(manager2.getSubtasks());
-        System.out.println("History:");
-        System.out.println(manager2.getHistory());
-    }
-
-    private Task getTaskAllKind(int id) throws TaskNotFoundException {
-        Task task = getTask(id);
-        if (task != null) {
-            return task;
-        }
-
-        Task epic = getEpic(id);
-        if (epic != null) {
-            return epic;
-        }
-
-        Task subtask = getSubtask(id);
-        if (subtask != null) {
-            return subtask;
-        }
-
-        throw new TaskNotFoundException("Не найдена задача произвольного типа по id!");
     }
 
     @Override
@@ -349,6 +294,61 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 throw new ManagerSaveException("Ошибка! Не удалось сохранить в файл.", ex);
             }
         }
+    }
+
+    public static void main(String[] args) {
+       FileBackedTaskManager manager = new FileBackedTaskManager(new File("data.csv"));
+
+        Task taskFirst = new Task("Поесть", "Принять пищу", TaskStatus.NEW);
+        manager.addTask(taskFirst);
+
+        Task taskSecond = new Task("Отдохнуть", "Поспать в тихий час", TaskStatus.NEW);
+        manager.addTask(taskSecond);
+
+        Epic epic1 = new Epic("Эпик №1", "Эпик");
+        manager.addEpic(epic1);
+
+        Epic epic2 = new Epic("Эпик №2", "Эпик");
+        manager.addEpic(epic2);
+
+        Epic epic3 = new Epic("Эпик №3", "Эпик");
+        manager.addEpic(epic3);
+
+        Subtask subtask11 = new Subtask("Эпик1 Подзадача1", "Подзадача 1.1", TaskStatus.NEW, epic1.getId());
+        manager.addSubtask(subtask11);
+
+        Subtask subtask12 = new Subtask("Эпик1 Подзадача2", "Подзадача 2.1",
+                TaskStatus.NEW, epic1.getId());
+        manager.addSubtask(subtask12);
+
+        Subtask subtask13 = new Subtask("Эпик1 Подзадача3", "Подзадача 3.1",
+                TaskStatus.NEW, epic1.getId());
+        manager.addSubtask(subtask13);
+
+        Subtask subtask21 = new Subtask("Эпик2 Подзадача1", "Подзадача 2.1",
+                TaskStatus.NEW, epic2.getId());
+        manager.addSubtask(subtask21);
+
+        Subtask subtask22 = new Subtask("Эпик2 Подзадача2", "Подзадача 2.2",
+                TaskStatus.DONE, epic2.getId());
+
+        manager.addSubtask(subtask22);
+
+        manager.getTask(taskFirst.getId());
+        manager.getEpic(epic2.getId());
+        manager.getSubtask(subtask11.getId());
+        manager.getTask(taskFirst.getId());
+        manager.getTask(taskSecond.getId());
+
+        FileBackedTaskManager manager2 = FileBackedTaskManager.loadFromFile(new File("data.csv"));
+        System.out.println("Tasks:");
+        System.out.println(manager2.getTasks());
+        System.out.println("Epics:");
+        System.out.println(manager2.getEpics());
+        System.out.println("Subtasks:");
+        System.out.println(manager2.getSubtasks());
+        System.out.println("History:");
+        System.out.println(manager2.getHistory());
     }
 }
 

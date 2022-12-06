@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final HashMap<Integer, Node> receivedTasks;
@@ -81,7 +80,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         //return listHistory;//
         return getTasks();
     }
-
 }
 
 class Node { //отдельный класс Node для узла списка//
@@ -96,3 +94,4 @@ class Node { //отдельный класс Node для узла списка//
         this.prev = prev;
     }
 }
+

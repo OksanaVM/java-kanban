@@ -10,4 +10,4 @@ id,type,name,status,description,epic
 9,SUBTASK,Эпик2 Подзадача1,NEW,Подзадача 2.1,4
 10,SUBTASK,Эпик2 Подзадача2,DONE,Подзадача 2.2,4
 
-4,6,1,2
+
