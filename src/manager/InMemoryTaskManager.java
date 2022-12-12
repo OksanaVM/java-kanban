@@ -15,8 +15,36 @@ public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager = Managers.getDefaultHistory();
     private int id = 0;
 
+    protected TreeSet<Task> prioritizedTasks = new TreeSet<>();
+
     InMemoryTaskManager() {
         id = 0;
+    }
+
+    private boolean canTaskBeAdded(Task t) {
+        prioritizedTasks.add(t);
+
+        if (t.getStartTime() != null) {
+            NavigableSet<Task> headSet = prioritizedTasks.headSet(t, false);
+            if (!headSet.isEmpty()) {
+                Task previous = headSet.last();
+                if (previous.getEndTime() != null && previous.getEndTime().isAfter(t.getStartTime())) {
+                    prioritizedTasks.remove(t);
+                    return false;
+                }
+            }
+
+            NavigableSet<Task> tailSet = prioritizedTasks.tailSet(t, false);
+            if (!tailSet.isEmpty()) {
+                Task next = tailSet.first();
+                if (next.getStartTime() != null && t.getEndTime().isAfter(next.getStartTime())) {
+                    prioritizedTasks.remove(t);
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -72,8 +100,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
-        task.setId(++id);
-        tasks.put(id, task);
+        if (canTaskBeAdded(task)) {
+            task.setId(++id);
+            tasks.put(id, task);
+        } else {
+            System.out.println("Задача " + task + " не добавлена, иначе будет пересечение");
+        }
+
     }
 
     @Override
@@ -84,12 +117,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask subtask) {
-        subtask.setId(++id);
-        subtasks.put(id, subtask);
-        Epic epic = epics.get(subtask.getEpicId());
-        if (epic != null) {
-            epic.addSubtask(subtask);
-            updateEpicStatus(epic);
+        if (canTaskBeAdded(subtask)) {
+            subtask.setId(++id);
+            subtasks.put(id, subtask);
+            Epic epic = epics.get(subtask.getEpicId());
+            if (epic != null) {
+                epic.addSubtask(subtask);
+                updateEpicStatus(epic);
+            }
+        } else {
+            System.out.println("Подзадача " + subtask + " не добавлена, иначе будет пересечение");
         }
     }
 
@@ -204,6 +241,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public Collection<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
@@ -216,4 +257,5 @@ public class InMemoryTaskManager implements TaskManager {
     protected void setId(int id) {
         this.id = id;
     }
+
 }
