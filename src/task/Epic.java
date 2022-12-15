@@ -1,10 +1,13 @@
 package task;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Epic extends Task {
+
+    private Instant endTime;
 
     private ArrayList<Integer> subtaskIds = new ArrayList<>();
 
@@ -48,6 +51,15 @@ public class Epic extends Task {
                 ", Статус='" + getStatus() + '\'' +
                 ", Подзадачи: id=" + s +
                 '}';
+    }
+
+    @Override
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
 }

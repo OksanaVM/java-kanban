@@ -10,17 +10,15 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
-class FileBackedTasksManagerTest extends TaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
 
-    FileBackedTasksManagerTest() {
+    FileBackedTaskManagerTest() {
         super(new FileBackedTaskManager(new File("data.csv")));
     }
 
-    // проверка сохранения в файл и восстановления из файла
+
     @Test
     void workWithFile() {
-
-        // всё пусто
 
         TaskManager manager = new FileBackedTaskManager(new File("data.csv"));
 
@@ -74,14 +72,20 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
         allTasks = manager2.getTasks();
         assertNotNull(allTasks, "Список задач - null");
         assertEquals(2, allTasks.size(), "Количество задач неверное");
+        assertTrue(allTasks.contains(task1), "Задача пропала");
+        assertTrue(allTasks.contains(task2), "Задача пропала");
 
         allEpics = manager2.getEpics();
         assertNotNull(allEpics, "Список эпиков - null!");
         assertEquals(2, allEpics.size(), "Количество эпиков неверное");
+        assertTrue(allEpics.contains(epic1), "Эпик пропал");
+        assertTrue(allEpics.contains(epic2), "Эпик пропал");
 
         allSubTasks = manager2.getSubtasks();
         assertNotNull(allSubTasks, "Список подзадач - null");
         assertEquals(2, allSubTasks.size(), "Количество подзадач неверное");
+        assertTrue(allSubTasks.contains(sub1), "Подзадача пропала");
+        assertTrue(allSubTasks.contains(sub2), "Подзадача пропала");
 
         // сохранение памяти эпика 2 о своих подзадачах
         Collection<Subtask> subs = manager2.getEpicSubtasks(epic2.getId());

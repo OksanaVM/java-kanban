@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import manager.Managers;
 import manager.TaskManager;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import task.*;
 
@@ -15,12 +15,11 @@ public class EpicTest {
         TaskManager manager = Managers.getDefault();
 
         Epic epic = new Epic("Epic name", "Epic...");
+        manager.addEpic(epic);
 
         TaskStatus expected = TaskStatus.NEW;
         TaskStatus actual = epic.getStatus();
         assertEquals(expected, actual, "У эпика нет подзадач. Ожидаем статус: " + expected + ", имеем: " + actual);
-
-        manager.addEpic(epic);
 
         Subtask sub1 = new Subtask("Subtask 1", "desc 1", TaskStatus.NEW, epic.getId());
         Subtask sub2 = new Subtask("SubTask 2", "desc 2", TaskStatus.NEW, epic.getId());
