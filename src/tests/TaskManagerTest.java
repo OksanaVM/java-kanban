@@ -225,9 +225,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(allTasks, "Список всех задач - null!");
         assertEquals(1, allTasks.size(), "Количество задач неверное");
 
-        taskManager.addTask(new Task("t2", "t 2 desc", TaskStatus.NEW));
+        Task task2 = new Task("t2", "t 2 desc", TaskStatus.NEW);
+        taskManager.addTask(task2);
         assertNotNull(allTasks, "Список всех задач - null!");
         assertEquals(2, allTasks.size(), "Количество задач неверное");
+        assertTrue(allTasks.contains(task), "Не те задачи!");
+        assertTrue(allTasks.contains(task2), "Не те задачи!");
     }
 
     @Test
@@ -290,7 +293,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
             while (iter.hasNext()) {
                 next = iter.next();
-                assertTrue(task.compareTo(next) < 0, "Задачи идут не по порядку времени начала");
+                assertTrue(task.compareTo(next) <= 0, "Задачи идут не по порядку времени начала");
                 task = next;
             }
         }
@@ -361,6 +364,110 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(2, history.size(), "Количество задач в истории неверное");
         assertTrue(history.contains(task1), "Отсутствует просмотр в истории");
         assertTrue(history.contains(task2), "Отсутствует просмотр в истории");
+    }
+
+    @Test
+    void checkIntersectionsIntersection5minutes() {
+        Instant ins = Instant.now();
+
+        Task task1 = new Task("task 1", "", TaskStatus.NEW);
+        task1.setStartTime(ins);
+        task1.setDuration(30);
+
+        Task task2 = new Task("task 2", "", TaskStatus.NEW);
+        task2.setStartTime(ins.plusSeconds(25 * 60));
+        task2.setDuration(40);
+
+        taskManager.addTask(task1);
+        try {
+            taskManager.addTask(task2);
+        } catch (Exception ex) {
+
+        }
+
+        Collection<Task> tasks = taskManager.getTasks();
+        assertEquals(1, tasks.size(), "Добавилась задача с пересечением в 5 минут!");
+    }
+
+    @Test
+    void checkIntersectionsStartTimeTheSame() {
+        Instant ins = Instant.now();
+
+        Task task1 = new Task("task 1", "", TaskStatus.NEW);
+        task1.setStartTime(ins);
+        task1.setDuration(0);
+
+        Task task2 = new Task("task 2", "", TaskStatus.NEW);
+        task2.setStartTime(ins);
+        task2.setDuration(0);
+
+        taskManager.addTask(task1);
+        try {
+            taskManager.addTask(task2);
+        } catch (Exception ex) {
+
+        }
+
+        Collection<Task> tasks = taskManager.getTasks();
+        assertEquals(1, tasks.size(), "Добавились задачи с одинаковым временем начала!");
+    }
+
+    @Test
+    void checkIntersectionsOneEndsAnotherStarts() {
+        Instant ins = Instant.now();
+
+        Task task1 = new Task("task 1", "", TaskStatus.NEW);
+        task1.setStartTime(ins);
+        task1.setDuration(30);
+
+        Task task2 = new Task("task 2", "", TaskStatus.NEW);
+        task2.setStartTime(ins.plusSeconds(30*60));
+        task2.setDuration(30);
+
+        taskManager.addTask(task1);
+        try {
+            taskManager.addTask(task2);
+        } catch (Exception ex) {
+
+        }
+
+        Collection<Task> tasks = taskManager.getTasks();
+        assertEquals(2, tasks.size(), "Не добавилась задача, которая начинается, когда другая заканчивается!");
+
+        taskManager.deleteTasks();
+
+        taskManager.addTask(task2);
+        try {
+            taskManager.addTask(task1);
+        } catch (Exception ex) {
+
+        }
+
+        tasks = taskManager.getTasks();
+        assertEquals(2, tasks.size(), "Не добавилась задача, которая заканчивается, когда другая начинается!");
+    }
+
+    @Test
+    void checkIntersectionsNoIntersection() {
+        Instant ins = Instant.now();
+
+        Task task1 = new Task("task 1", "", TaskStatus.NEW);
+        task1.setStartTime(ins);
+        task1.setDuration(2);
+
+        Task task2 = new Task("task 2", "", TaskStatus.NEW);
+        task2.setStartTime(ins.plusSeconds(5*60));
+        task2.setDuration(4);
+
+        taskManager.addTask(task1);
+        try {
+            taskManager.addTask(task2);
+        } catch (Exception ex) {
+
+        }
+
+        Collection<Task> tasks = taskManager.getTasks();
+        assertEquals(2, tasks.size(), "Не добавились задача, хотя пересечения нет!");
     }
 
 }

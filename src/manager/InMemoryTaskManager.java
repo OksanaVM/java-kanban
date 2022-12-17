@@ -23,7 +23,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean canTaskBeAdded(Task t) {
-        prioritizedTasks.add(t);
+        boolean added = prioritizedTasks.add(t);
+        if (!added) {
+            return false;
+        }
 
         if (t.getStartTime() != null) {
             NavigableSet<Task> headSet = prioritizedTasks.headSet(t, false);
@@ -42,6 +45,11 @@ public class InMemoryTaskManager implements TaskManager {
                     prioritizedTasks.remove(t);
                     return false;
                 }
+            }
+
+            if (headSet.size() + tailSet.size() < prioritizedTasks.size() - 1) {
+                prioritizedTasks.remove(t);
+                return false;
             }
         }
 
@@ -158,6 +166,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTask(int taskId) {
         if (tasks.containsKey(taskId)) {
+            Task task = tasks.get(taskId);
+            prioritizedTasks.remove(task);
             tasks.remove(taskId);
             historyManager.remove(taskId);
         }
@@ -186,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicTime(epic);
         }
         if (subtasks.containsKey(subtaskId)) {
+            prioritizedTasks.remove(subtask);
             subtasks.remove(subtaskId);
             historyManager.remove(subtaskId);
         }
