@@ -80,6 +80,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         //return listHistory;//
         return getTasks();
     }
+
+    @Override
+    public String toString() {
+        List<String> s = new ArrayList<>();
+        for (Task task : getTasks()) {
+            s.add(String.valueOf(task.getId()));
+        }
+        String hist = String.join(",", s);
+        return hist;
+    }
+
 }
 
 class Node { //отдельный класс Node для узла списка//

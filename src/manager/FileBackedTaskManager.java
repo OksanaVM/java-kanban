@@ -13,12 +13,16 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
-    private boolean needToSave = true;
+    protected boolean needToSave = true;
 
     public FileBackedTaskManager(File file) {
         super();
         this.file = file;
+    }
 
+    public FileBackedTaskManager() {
+        super();
+        file = null;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
@@ -102,7 +106,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return fileBackedTaskManager;
     }
 
-    private Task getTaskAllKind(int id) throws TaskNotFoundException {
+    protected Task getTaskAllKind(int id) throws TaskNotFoundException {
         Task task = getTask(id);
         if (task != null) {
             return task;
@@ -119,15 +123,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
 
         throw new TaskNotFoundException("Не найдена задача произвольного типа по id!");
-    }
-
-    private static String historyToString(HistoryManager manager) {
-        List<String> s = new ArrayList<>();
-        for (Task task : manager.getHistory()) {
-            s.add(String.valueOf(task.getId()));
-        }
-        String hist = String.join(",", s);
-        return hist;
     }
 
     private static List<Integer> historyFromString(String value) {
@@ -280,7 +275,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    private void save() {
+    protected void save() {
         if (needToSave) {
             try (PrintWriter printWriter = new PrintWriter(file, "UTF-8")) {
                 printWriter.println("id,type,name,status,description,startTime,duration,epic");
@@ -298,7 +293,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 List<Task> history = getHistory();
                 if (!history.isEmpty()) {
                     printWriter.println();
-                    printWriter.println(historyToString(getHistoryManager()));
+                    printWriter.println(getHistoryManager().toString());
                 }
             } catch (IOException ex) {
                 throw new ManagerSaveException("Ошибка! Не удалось сохранить в файл.", ex);

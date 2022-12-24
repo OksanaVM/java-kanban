@@ -690,8 +690,7 @@ public class Main {
 
     }
 
-// добавили
-
+    // добавили
     static void checkHistory() {
 
         TaskManager manager = Managers.getDefault();

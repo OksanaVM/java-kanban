@@ -336,6 +336,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getSubtasksOfEpic() {
         Epic epic = new Epic("Epic", "desc");
+        System.out.println(taskManager + " - "+epic);
         taskManager.addEpic(epic);
         Subtask sub1 = new Subtask("sub 1", "desc ", TaskStatus.NEW, epic.getId());
         Subtask sub2 = new Subtask("sub 2", "desc", TaskStatus.NEW, epic.getId());
