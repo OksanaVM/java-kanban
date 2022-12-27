@@ -81,11 +81,6 @@ public class KVServer {
                     return;
                 }
                 String value = readText(h);
-                /*if (value.isEmpty()) {
-                    System.out.println("Value для сохранения пустой. value указывается в теле запроса");
-                    h.sendResponseHeaders(400, 0);
-                    return;
-                }*/
                 data.put(key, value);
                 System.out.println("Значение для ключа " + key + " успешно обновлено!");
                 h.sendResponseHeaders(200, 0);
@@ -129,16 +124,16 @@ public class KVServer {
         return "" + System.currentTimeMillis();
     }
 
-    protected boolean hasAuth(HttpExchange h) {
+    private boolean hasAuth(HttpExchange h) {
         String rawQuery = h.getRequestURI().getRawQuery();
         return rawQuery != null && (rawQuery.contains("API_TOKEN=") || rawQuery.contains("API_KEY=DEBUG"));
     }
 
-    protected String readText(HttpExchange h) throws IOException {
+    private String readText(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), UTF_8);
     }
 
-    protected void sendText(HttpExchange h, String text) throws IOException {
+    private void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);

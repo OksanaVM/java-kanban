@@ -1,4 +1,6 @@
-import adapters.InstantAdapter;
+package http;
+
+import http.adapter.InstantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -17,7 +19,7 @@ import java.util.List;
 /*  наш клиентский имитация-менеджер, на самом деле отправляющий данные по http серверу HttpTaskServer,
 где работает настоящий менеджер - HTTPTaskManager */
 
-public class OurManager implements TaskManager {
+public class HttpTaskManagerClient implements TaskManager {
 
     private HttpClient httpClient = HttpClient.newHttpClient();
     private String addressOfServer = "http://localhost:8080";
@@ -32,8 +34,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<Collection<Task>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -46,8 +47,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<Collection<Epic>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -60,8 +60,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<Collection<Subtask>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -74,8 +73,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<List<Subtask>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -88,8 +86,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, Task.class);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -102,8 +99,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, Epic.class);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -117,8 +113,7 @@ public class OurManager implements TaskManager {
             Subtask s = gson.fromJson(answer, Subtask.class);
             return s;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -134,7 +129,7 @@ public class OurManager implements TaskManager {
             int id = Integer.parseInt(resp);
             task.setId(id);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -150,7 +145,7 @@ public class OurManager implements TaskManager {
             int id = Integer.parseInt(resp);
             epic.setId(id);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -166,7 +161,7 @@ public class OurManager implements TaskManager {
             int id = Integer.parseInt(resp);
             subtask.setId(id);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -178,7 +173,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -190,7 +185,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -202,7 +197,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -213,7 +208,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -224,7 +219,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -235,7 +230,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -246,7 +241,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -257,7 +252,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -268,7 +263,7 @@ public class OurManager implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
@@ -281,8 +276,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<Collection<Task>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -295,8 +289,7 @@ public class OurManager implements TaskManager {
             String answer = response.body();
             return gson.fromJson(answer, new TypeToken<List<Task>>(){}.getType());
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 

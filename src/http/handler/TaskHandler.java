@@ -1,5 +1,5 @@
-package http.handlers;
-import adapters.InstantAdapter;
+package http.handler;
+import http.adapter.InstantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -107,11 +107,14 @@ public class TaskHandler implements HttpHandler {
                 response = "Некорректный запрос";
         }
 
-        httpExchange.getResponseHeaders().set("Content-Type", "text/plain; charset=" + DEFAULT_CHARSET);
-        httpExchange.sendResponseHeaders(statusCode, 0);
+        byte[] bytes = response.getBytes(DEFAULT_CHARSET);
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=" + DEFAULT_CHARSET);
+        httpExchange.sendResponseHeaders(statusCode, bytes.length);
 
         try (OutputStream os = httpExchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+
+        httpExchange.close();
     }
 }

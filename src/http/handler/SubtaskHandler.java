@@ -1,6 +1,8 @@
-package http.handlers;
+package http.handler;
 
+import http.adapter.InstantAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -11,9 +13,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 public class SubtaskHandler implements HttpHandler {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final TaskManager taskManager;
 
@@ -60,7 +63,7 @@ public class SubtaskHandler implements HttpHandler {
                     System.out.println("получен на сервере сабтаск " + subtask);
                     int id = subtask.getId();
                     if (taskManager.getSubtask(id) != null) {
-                        taskManager.updateTask(subtask);
+                        taskManager.updateSubtask(subtask);
                         statusCode = 200;
                         response = "Обновлена подзадача с id=" + id;
                     }
@@ -99,12 +102,15 @@ public class SubtaskHandler implements HttpHandler {
                 response = "Некорректный запрос";
         }
 
-        exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=" + DEFAULT_CHARSET);
-        exchange.sendResponseHeaders(statusCode, 0);
+        byte[] bytes = response.getBytes(DEFAULT_CHARSET);
+        exchange.getResponseHeaders().add("Content-Type", "application/json; charset=" + DEFAULT_CHARSET);
+        exchange.sendResponseHeaders(statusCode, bytes.length);
 
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+
+        exchange.close();
     }
 
 }

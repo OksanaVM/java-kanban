@@ -1,5 +1,5 @@
-package http.handlers;
-import adapters.InstantAdapter;
+package http.handler;
+import http.adapter.InstantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -66,7 +66,7 @@ public class EpicHandler implements HttpHandler {
                     else {
                         int id = epic.getId();
                         if (taskManager.getEpic(id) != null) {
-                            taskManager.updateTask(epic);
+                            taskManager.updateEpic(epic);
                             statusCode = 200;
                             response = "Эпик с id=" + id + " обновлен";
                         } else {
@@ -112,6 +112,8 @@ public class EpicHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(bytes);
         }
+
+        exchange.close();
     }
 
 }

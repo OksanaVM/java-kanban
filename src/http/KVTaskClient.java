@@ -57,7 +57,7 @@ public class KVTaskClient {
             }
         }
         catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -78,8 +78,7 @@ public class KVTaskClient {
             return response.body();
         }
         catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return "Во время запроса произошла ошибка";
+            throw new RuntimeException(e);
         }
     }
 

@@ -2,9 +2,6 @@ package manager;
 
 // добавили
 
-import http.HTTPTaskManager;
-import http.KVServer;
-
 import java.io.IOException;
 
 public class Managers {
@@ -18,6 +15,6 @@ public class Managers {
     }
 
     public static TaskManager getDefault(String serverAddress) throws IOException, InterruptedException {
-        return new HTTPTaskManager(serverAddress);
+        return new HttpTaskManager(serverAddress);
     }
 }

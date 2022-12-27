@@ -1,7 +1,8 @@
 package http;
 
 import com.sun.net.httpserver.HttpServer;
-import http.handlers.*;
+import http.handler.*;
+import manager.HttpTaskManager;
 import manager.TaskManager;
 
 import java.io.IOException;
@@ -14,15 +15,15 @@ public class HttpTaskServer {
     private final String apiToken;
 
     public HttpTaskServer() throws IOException, InterruptedException {
-        HTTPTaskManager taskManager = new HTTPTaskManager("http://localhost:" + KVServer.PORT);
-        this.apiToken = taskManager.getApitoken();
+        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:" + KVServer.PORT);
+        this.apiToken = taskManager.getApiToken();
         this.httpServer = HttpServer.create();
         initHandlers(taskManager);
     }
 
     public HttpTaskServer(String apiToken) throws IOException, InterruptedException {
         this.apiToken = apiToken;
-        HTTPTaskManager taskManager = new HTTPTaskManager("http://localhost:" + KVServer.PORT, apiToken);
+        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:" + KVServer.PORT, apiToken);
         this.httpServer = HttpServer.create();
         initHandlers(taskManager);
     }

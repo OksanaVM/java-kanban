@@ -16,9 +16,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         super(new FileBackedTaskManager(new File("data.csv")));
     }
 
-
     @Test
-    void workWithFile() {
+    void testSaveAndLoad() {
 
         TaskManager manager = new FileBackedTaskManager(new File("data.csv"));
 

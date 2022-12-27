@@ -1,10 +1,9 @@
-package http.handlers;
-import adapters.InstantAdapter;
+package http.handler;
+import http.adapter.InstantAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
 import manager.TaskManager;
 
 import java.io.IOException;
@@ -13,12 +12,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
-public class HistoryHandler implements HttpHandler {
+public class SubtaskByEpicHandler implements HttpHandler {
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final TaskManager taskManager;
 
-    public HistoryHandler(TaskManager taskManager) {
+    public SubtaskByEpicHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -33,18 +32,29 @@ public class HistoryHandler implements HttpHandler {
 
         switch (method) {
             case "GET":
-                statusCode = 200;
-                response = gson.toJson(taskManager.getHistory());
+                String query = httpExchange.getRequestURI().getQuery();
+                try {
+                    int id = Integer.parseInt(query.substring(query.indexOf("id=") + 3));
+                    statusCode = 200;
+                    response = gson.toJson(taskManager.getEpicSubtasks(id));
+                } catch (StringIndexOutOfBoundsException | NullPointerException e) {
+                    response = "В запросе отсутствует необходимый параметр - id";
+                } catch (NumberFormatException e) {
+                    response = "Неверный формат id";
+                }
                 break;
             default:
                 response = "Некорректный запрос";
         }
 
-        httpExchange.getResponseHeaders().set("Content-Type", "text/plain; charset=" + DEFAULT_CHARSET);
-        httpExchange.sendResponseHeaders(statusCode, 0);
+        byte[] bytes = response.getBytes(DEFAULT_CHARSET);
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=" + DEFAULT_CHARSET);
+        httpExchange.sendResponseHeaders(statusCode, bytes.length);
 
         try (OutputStream os = httpExchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+
+        httpExchange.close();
     }
 }

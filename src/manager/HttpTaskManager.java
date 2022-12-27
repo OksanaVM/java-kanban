@@ -1,24 +1,23 @@
-package http;
+package manager;
 
-import adapters.InstantAdapter;
+import http.KVTaskClient;
+import http.adapter.InstantAdapter;
 import com.google.gson.*;
 import exceptions.ManagerSaveException;
-import manager.FileBackedTaskManager;
-import manager.ManagerSnapshot;
 import task.*;
 import java.io.IOException;
 import java.time.Instant;
 
-public class HTTPTaskManager extends FileBackedTaskManager {
+public class HttpTaskManager extends FileBackedTaskManager {
 
-    private String kvServerAddrress; // это адрес сервера KVServer, на котором хранится состояние менеджера
-    private KVTaskClient kvTaskClient;
+    private final String kvServerAddrress; // это адрес сервера KVServer, на котором хранится состояние менеджера
+    private final KVTaskClient kvTaskClient;
     private String apiToken = null;
 
-    private Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
 
     // создание менеджера с чистого листа
-    public HTTPTaskManager(String kvServerAddrress) throws IOException, InterruptedException {
+    public HttpTaskManager(String kvServerAddrress) throws IOException, InterruptedException {
         //super();
         this.kvServerAddrress = kvServerAddrress;
         kvTaskClient = new KVTaskClient(kvServerAddrress);
@@ -26,7 +25,7 @@ public class HTTPTaskManager extends FileBackedTaskManager {
     }
 
     // создание менеджера с ключом, который должен запросить у KVServer и восстановить свое состояние
-    public HTTPTaskManager(String kvServerAddrress, String apiToken) throws IOException, InterruptedException {
+    public HttpTaskManager(String kvServerAddrress, String apiToken) throws IOException, InterruptedException {
         //super();
         this.kvServerAddrress = kvServerAddrress;
         this.apiToken = apiToken;
@@ -80,7 +79,7 @@ public class HTTPTaskManager extends FileBackedTaskManager {
         needToSave = true;
     }
 
-    public String getApitoken() {
+    public String getApiToken() {
         return apiToken;
     }
 
