@@ -13,10 +13,14 @@ import java.util.Iterator;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
-    T taskManager;
+    protected T taskManager;
 
     TaskManagerTest(T manager) {
         taskManager = manager;
+    }
+
+    TaskManagerTest() {
+
     }
 
     @Test
