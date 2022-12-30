@@ -1,20 +1,17 @@
 package manager;
 
-// добавили
+import http.KVServer;
 
 import java.io.IOException;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static TaskManager getDefault() throws IOException, InterruptedException {
+        return new HttpTaskManager(KVServer.address + ":" + KVServer.PORT);
     }
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getDefault(String serverAddress) throws IOException, InterruptedException {
-        return new HttpTaskManager(serverAddress);
-    }
 }

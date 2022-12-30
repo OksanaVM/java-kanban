@@ -32,7 +32,7 @@ class HttpTaskManagerTest extends FileBackedTaskManagerTest {
         kvServer = new KVServer();
         kvServer.start();
         sleep(100);
-        taskManager = Managers.getDefault("http://localhost:" + KVServer.PORT);
+        taskManager = Managers.getDefault();
         sleep(100);
     }
 
@@ -46,7 +46,7 @@ class HttpTaskManagerTest extends FileBackedTaskManagerTest {
     @Override
     void testSaveAndLoad() {
         try {
-            TaskManager manager = Managers.getDefault("http://localhost:" + KVServer.PORT);
+            TaskManager manager = Managers.getDefault();
 
             Collection<Task> allTasks = manager.getTasks();
             assertNotNull(allTasks, "Список задач - null");

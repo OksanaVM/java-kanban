@@ -4,13 +4,14 @@ import http.KVTaskClient;
 import http.adapter.InstantAdapter;
 import com.google.gson.*;
 import exceptions.ManagerSaveException;
+import manager.FileBackedTaskManager;
+import manager.ManagerSnapshot;
 import task.*;
 import java.io.IOException;
 import java.time.Instant;
 
 public class HttpTaskManager extends FileBackedTaskManager {
 
-    private final String kvServerAddrress; // это адрес сервера KVServer, на котором хранится состояние менеджера
     private final KVTaskClient kvTaskClient;
     private String apiToken = null;
 
@@ -18,16 +19,12 @@ public class HttpTaskManager extends FileBackedTaskManager {
 
     // создание менеджера с чистого листа
     public HttpTaskManager(String kvServerAddrress) throws IOException, InterruptedException {
-        //super();
-        this.kvServerAddrress = kvServerAddrress;
         kvTaskClient = new KVTaskClient(kvServerAddrress);
         apiToken = kvTaskClient.getApiToken();
     }
 
     // создание менеджера с ключом, который должен запросить у KVServer и восстановить свое состояние
     public HttpTaskManager(String kvServerAddrress, String apiToken) throws IOException, InterruptedException {
-        //super();
-        this.kvServerAddrress = kvServerAddrress;
         this.apiToken = apiToken;
         kvTaskClient = new KVTaskClient(kvServerAddrress, apiToken);
         String snapString = kvTaskClient.load(apiToken);

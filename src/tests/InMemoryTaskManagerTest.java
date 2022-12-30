@@ -1,11 +1,11 @@
 package tests;
 
-import manager.Managers;
+import manager.InMemoryTaskManager;
 
 class InMemoryTaskManagerTest extends TaskManagerTest {
 
     InMemoryTaskManagerTest() {
-        super(Managers.getDefault());
+        super(new InMemoryTaskManager());
     }
 
 }

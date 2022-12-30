@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import manager.InMemoryTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ public class EpicTest {
 
     @Test
     public void checkStatus() {
-        TaskManager manager = Managers.getDefault();
+        TaskManager manager = new InMemoryTaskManager();
 
         Epic epic = new Epic("Epic name", "Epic...");
         manager.addEpic(epic);

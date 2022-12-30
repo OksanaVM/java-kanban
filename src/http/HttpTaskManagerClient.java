@@ -125,9 +125,10 @@ public class HttpTaskManagerClient implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String resp = response.body();
-            resp = resp.substring(resp.indexOf("id=") + 3);
-            int id = Integer.parseInt(resp);
-            task.setId(id);
+            //resp = resp.substring(resp.indexOf("id=") + 3);
+            //int id = Integer.parseInt(resp);
+            Task t = gson.fromJson(resp, Task.class);
+            task.setId(t.getId());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -141,9 +142,10 @@ public class HttpTaskManagerClient implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String resp = response.body();
-            resp = resp.substring(resp.indexOf("id=") + 3);
-            int id = Integer.parseInt(resp);
-            epic.setId(id);
+            //resp = resp.substring(resp.indexOf("id=") + 3);
+            //int id = Integer.parseInt(resp);
+            Epic e = gson.fromJson(resp, Epic.class);
+            epic.setId(e.getId());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -157,9 +159,10 @@ public class HttpTaskManagerClient implements TaskManager {
             HttpRequest request = HttpRequest.newBuilder().uri(url).POST(body).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String resp = response.body();
-            resp = resp.substring(resp.indexOf("id=") + 3);
-            int id = Integer.parseInt(resp);
-            subtask.setId(id);
+            //resp = resp.substring(resp.indexOf("id=") + 3);
+            //int id = Integer.parseInt(resp);
+            Subtask sub = gson.fromJson(resp, Subtask.class);
+            subtask.setId(sub.getId());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

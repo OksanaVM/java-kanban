@@ -1,21 +1,11 @@
 package http.handler;
-import http.adapter.InstantAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-
 import manager.TaskManager;
-
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 
-public class HistoryHandler implements HttpHandler {
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(Instant.class, new InstantAdapter()).create();
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+public class HistoryHandler extends AbstractHandler {
+
     private final TaskManager taskManager;
 
     public HistoryHandler(TaskManager taskManager) {
@@ -23,31 +13,29 @@ public class HistoryHandler implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
+    public void handle(HttpExchange httpExchange) {
         int statusCode = 400;
         String response;
-        String method = httpExchange.getRequestMethod();
-        String path = String.valueOf(httpExchange.getRequestURI());
+        try {
+            String method = httpExchange.getRequestMethod();
+            String path = String.valueOf(httpExchange.getRequestURI());
 
-        System.out.println("Обрабатывается запрос " + path + " с методом " + method);
+            System.out.println("Обрабатывается запрос " + path + " с методом " + method);
 
-        switch (method) {
-            case "GET":
-                statusCode = 200;
-                response = gson.toJson(taskManager.getHistory());
-                break;
-            default:
-                response = "Некорректный запрос";
+            switch (method) {
+                case "GET":
+                    statusCode = 200;
+                    response = gson.toJson(taskManager.getHistory());
+                    break;
+                default:
+                    response = "Некорректный запрос";
+            }
+
+            writeResponse(httpExchange, response, statusCode);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            httpExchange.close();
         }
-
-        byte[] bytes = response.getBytes(DEFAULT_CHARSET);
-        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=" + DEFAULT_CHARSET);
-        httpExchange.sendResponseHeaders(statusCode, bytes.length);
-
-        try (OutputStream os = httpExchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
-
-        httpExchange.close();
     }
 }

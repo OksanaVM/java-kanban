@@ -18,7 +18,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected TreeSet<Task> prioritizedTasks = new TreeSet<>();
 
-    InMemoryTaskManager() {
+    public InMemoryTaskManager() {
         id = 0;
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 class HistoryManagerTest {
 
     HistoryManager managerH = Managers.getDefaultHistory();
-    TaskManager manager = Managers.getDefault();
+    TaskManager manager = new InMemoryTaskManager();
 
     @Test
     void add() {
