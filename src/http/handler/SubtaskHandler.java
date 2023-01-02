@@ -35,10 +35,11 @@ public class SubtaskHandler extends AbstractHandler {
                             Subtask subtask = taskManager.getSubtask(id);
                             if (subtask != null) {
                                 response = gson.toJson(subtask);
+                                statusCode = 200;
                             } else {
-                                response = "Подзадача с данным id не найдена";
+                                response = "null";
+                                statusCode = 404;
                             }
-                            statusCode = 200;
                         } catch (StringIndexOutOfBoundsException e) {
                             statusCode = 400;
                             response = "В запросе отсутствует необходимый параметр id";

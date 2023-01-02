@@ -32,11 +32,11 @@ public class KVTaskClient {
         apiToken = response.body();
     }
 
-    // Запуск с уже готовым ключом
+ /*   // Запуск с уже готовым ключом
     public KVTaskClient(String serverURL, String apiToken) throws IOException, InterruptedException {
         this.serverURL = serverURL;
         this.apiToken = apiToken;
-    }
+    }*/
 
     public void put(String key, String json) {
         URI uri = URI.create(this.serverURL + "/save/?API_TOKEN=" + apiToken);

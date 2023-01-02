@@ -32,9 +32,9 @@ public class TaskHandler extends AbstractHandler {
                     System.out.println("query: " + query);
                     if (query == null) {
                         statusCode = 200;
-                        System.out.println("TASKS: " + taskManager.getTasks());
+                        //System.out.println("TASKS: " + taskManager.getTasks());
                         String jsonString = gson.toJson(taskManager.getTasks());
-                        System.out.println("RESPONSE: " + jsonString);
+                        //System.out.println("RESPONSE: " + jsonString);
                         response = gson.toJson(taskManager.getTasks());
                     } else {
                         try {
@@ -42,10 +42,11 @@ public class TaskHandler extends AbstractHandler {
                             Task task = taskManager.getTask(id);
                             if (task != null) {
                                 response = gson.toJson(task);
+                                statusCode = 200;
                             } else {
-                                response = "Задача с данным id не найдена";
+                                response = "null";
+                                statusCode = 404;
                             }
-                            statusCode = 200;
                         } catch (StringIndexOutOfBoundsException e) {
                             statusCode = 400;
                             response = "В запросе отсутствует необходимый параметр id";
@@ -63,7 +64,7 @@ public class TaskHandler extends AbstractHandler {
                         int id = task.getId();
                         if (id != 0) {
                             taskManager.updateTask(task);
-                            statusCode = 201;
+                            statusCode = 200;
                             response = gson.toJson(task);
                         } else {
                             taskManager.addTask(task);

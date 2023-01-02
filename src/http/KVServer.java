@@ -11,9 +11,8 @@ import java.util.Map;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class KVServer {
-    public static final String address = "http://localhost";
     public static final int PORT = 8078;
-    private String apiToken;
+    private final String apiToken;
     private final HttpServer server;
     private final Map<String, String> data = new HashMap<>();
 
@@ -26,6 +25,7 @@ public class KVServer {
     }
 
     private void load(HttpExchange h) {
+        // TODO Добавьте получение значения по ключу
         try {
             System.out.println("\n/load");
             if (!hasAuth(h)) {
@@ -34,10 +34,7 @@ public class KVServer {
                 return;
             }
             if ("GET".equals(h.getRequestMethod())) {
-                String key = h.getRequestURI().toString().substring("/load/".length());
-                if (key.startsWith("?API_TOKEN=")) {
-                    key = key.substring("?API_TOKEN=".length());
-                }
+                String key = h.getRequestURI().getRawQuery().substring("/load/".length());
                 if (key.isEmpty()) {
                     System.out.println("Key для сохранения пустой. Key указывается в пути: /load/{key}");
                     h.sendResponseHeaders(400, 0);
@@ -72,16 +69,18 @@ public class KVServer {
                 return;
             }
             if ("POST".equals(h.getRequestMethod())) {
-                String key = h.getRequestURI().toString().substring("/save/".length());
-                if (key.startsWith("?API_TOKEN=")) {
-                    key = key.substring("?API_TOKEN=".length());
-                }
+                String key = h.getRequestURI().getRawQuery().substring("/save/".length());
                 if (key.isEmpty()) {
                     System.out.println("Key для сохранения пустой. key указывается в пути: /save/{key}");
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
                 String value = readText(h);
+                if (value.isEmpty()) {
+                    System.out.println("Value для сохранения пустой. value указывается в теле запроса");
+                    h.sendResponseHeaders(400, 0);
+                    return;
+                }
                 data.put(key, value);
                 System.out.println("Значение для ключа " + key + " успешно обновлено!");
                 h.sendResponseHeaders(200, 0);
@@ -98,7 +97,6 @@ public class KVServer {
         try {
             System.out.println("\n/register");
             if ("GET".equals(h.getRequestMethod())) {
-                apiToken = generateApiToken();
                 sendText(h, apiToken);
             } else {
                 System.out.println("/register ждёт GET-запрос, а получил " + h.getRequestMethod());
@@ -125,16 +123,16 @@ public class KVServer {
         return "" + System.currentTimeMillis();
     }
 
-    private boolean hasAuth(HttpExchange h) {
+    protected boolean hasAuth(HttpExchange h) {
         String rawQuery = h.getRequestURI().getRawQuery();
-        return rawQuery != null && (rawQuery.contains("API_TOKEN=") || rawQuery.contains("API_KEY=DEBUG"));
+        return rawQuery != null && (rawQuery.contains("API_TOKEN=" + apiToken) || rawQuery.contains("API_TOKEN=DEBUG"));
     }
 
-    private String readText(HttpExchange h) throws IOException {
+    protected String readText(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), UTF_8);
     }
 
-    private void sendText(HttpExchange h, String text) throws IOException {
+    protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);

@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Managers {
 
     public static TaskManager getDefault() throws IOException, InterruptedException {
-        return new HttpTaskManager(KVServer.address + ":" + KVServer.PORT);
+        return new HttpTaskManager("http://localhost:" + KVServer.PORT);
     }
 
     public static HistoryManager getDefaultHistory() {

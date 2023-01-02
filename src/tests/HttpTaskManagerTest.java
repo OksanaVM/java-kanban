@@ -94,7 +94,7 @@ class HttpTaskManagerTest extends FileBackedTaskManagerTest {
             // Проверяем восстановление
 
             String apiToken = ((HttpTaskManager)manager).getApiToken();
-            TaskManager manager2 = new HttpTaskManager("http://localhost:" + KVServer.PORT, apiToken);
+            TaskManager manager2 = new HttpTaskManager("http://localhost:" + KVServer.PORT);
 
             allTasks = manager2.getTasks();
             assertNotNull(allTasks, "Список задач - null");

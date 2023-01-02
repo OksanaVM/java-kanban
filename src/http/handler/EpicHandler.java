@@ -35,10 +35,11 @@ public class EpicHandler extends AbstractHandler {
                             Epic epic = taskManager.getEpic(id);
                             if (epic != null) {
                                 response = gson.toJson(epic);
+                                statusCode = 200;
                             } else {
-                                response = "Эпик с данным id не найден";
+                                response = "null";
+                                statusCode = 404;
                             }
-                            statusCode = 200;
                         } catch (StringIndexOutOfBoundsException e) {
                             statusCode = 400;
                             response = "В запросе отсутствует необходимый параметр id";

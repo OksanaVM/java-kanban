@@ -549,10 +549,9 @@ public class Main_2 {
 
             //////////////////////////
 
-            String apiToken = httpTaskServer.getApiToken();
             httpTaskServer.stop();
 
-            newHttpTaskServer = new HttpTaskServer(apiToken);  // новый сервер, который восстановит данные, используя ключ старого сервера
+            newHttpTaskServer = new HttpTaskServer();  // новый сервер, который восстановит данные, используя ключ старого сервера
             newHttpTaskServer.start();
 
             System.out.println("getTasks");

@@ -12,18 +12,9 @@ public class HttpTaskServer {
 
     private final HttpServer httpServer;
     private static final int PORT = 8080;
-    private final String apiToken;
 
     public HttpTaskServer() throws IOException, InterruptedException {
         HttpTaskManager taskManager = new HttpTaskManager("http://localhost:" + KVServer.PORT);
-        this.apiToken = taskManager.getApiToken();
-        this.httpServer = HttpServer.create();
-        initHandlers(taskManager);
-    }
-
-    public HttpTaskServer(String apiToken) throws IOException, InterruptedException {
-        this.apiToken = apiToken;
-        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:" + KVServer.PORT, apiToken);
         this.httpServer = HttpServer.create();
         initHandlers(taskManager);
     }
@@ -44,10 +35,6 @@ public class HttpTaskServer {
 
     public void stop() {
         httpServer.stop(1);
-    }
-
-    public String getApiToken() {
-        return apiToken;
     }
 
 }
