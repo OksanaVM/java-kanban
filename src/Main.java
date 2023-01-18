@@ -16,6 +16,7 @@ public class Main {
         manager.addEpic(epic1);
 
 // нет ни одной
+        // проверка
         if (epic1.getStatus() != TaskStatus.NEW) {
             System.err.println("Неверный статус у эпика: " + epic1.getStatus() + ", ожидалось: " + TaskStatus.NEW);
         }
@@ -472,7 +473,7 @@ public class Main {
         checkHistory();
 
 // добавили (для себя: проверяем, что не нарушена инкапсуляция поля epicSubtasks в классе Epic...) Потом можно убрать
-
+//
         TaskManager manager = new InMemoryTaskManager();
         Epic epic1 = new Epic("1", "11");
         manager.addEpic(epic1);
